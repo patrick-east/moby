@@ -5,14 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"io/ioutil"
-	"os"
-	"reflect"
-	"runtime"
-	"strings"
-	"sync"
-
 	daemondiscovery "github.com/docker/docker/daemon/discovery"
 	"github.com/docker/docker/opts"
 	"github.com/docker/docker/pkg/authorization"
@@ -21,6 +13,13 @@ import (
 	"github.com/imdario/mergo"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
+	"io"
+	"io/ioutil"
+	"os"
+	"reflect"
+	"runtime"
+	"strings"
+	"sync"
 )
 
 const (
@@ -43,6 +42,8 @@ const (
 	DisableNetworkBridge = "none"
 	// DefaultInitBinary is the name of the default init binary
 	DefaultInitBinary = "docker-init"
+	// DefaultVolumePluginAPITimeout
+	DefaultVolumePluginAPITimeout = 120
 )
 
 // flatOptions contains configuration keys
@@ -225,6 +226,9 @@ type CommonConfig struct {
 	// Features contains a list of feature key value pairs indicating what features are enabled or disabled.
 	// If a certain feature doesn't appear in this list then it's unset (i.e. neither true nor false).
 	Features map[string]bool `json:"features,omitempty"`
+
+	// Embedded volume plugin config
+	VolumePluginAPITimeout int `json:"volume-plugin-api-timeout,omitempty"`
 }
 
 // IsValueSet returns true if a configuration value
